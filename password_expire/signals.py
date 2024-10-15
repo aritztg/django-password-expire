@@ -59,7 +59,7 @@ def change_password_handler(sender, instance, **kwargs):
 
 def login_handler(sender, request, user, **kwargs):
     # Prevents login if password expired
-    checker = PasswordChecker(request.user)
+    checker = PasswordChecker(user)
     if checker.is_expired():
         if hasattr(settings, 'PASSWORD_EXPIRE_CONTACT'):
             contact = settings.PASSWORD_EXPIRE_CONTACT
