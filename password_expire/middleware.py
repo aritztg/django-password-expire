@@ -35,11 +35,18 @@ class PasswordExpireMiddleware:
 
         return response
 
+    @staticmethod
+    def is_ajax(request):
+        """
+        Auxiliar method to distinguish if the request is async. Django >=4.0 dropped this method. 
+        """
+        return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
     def is_page_for_warning(self, request):
         """
         Only warn on pages that are GET requests and not ajax. Also ignore logouts.
         """
-        if request.method == "GET" and not request.is_ajax():
+        if request.method == "GET" and not self.is_ajax(request):
             match = resolve(request.path)
             if match and match.url_name == 'logout':
                 return False
